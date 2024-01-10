@@ -36,8 +36,8 @@ public class SecurityConfig {
                 csrf(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(
-                        (auth) -> auth.requestMatchers("/auth/**", "/upload/**","/products/**","/*").permitAll()
-                                .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        (auth) -> auth.requestMatchers("/api/v1/auth/**", "/api/v1/upload/**","/api/v1/products/**","/*").permitAll()
+                                .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling((auth) -> auth.authenticationEntryPoint(jwtEntryPoint)

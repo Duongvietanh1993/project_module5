@@ -1,4 +1,4 @@
-package com.cinema.controller;
+package com.cinema.security.controller;
 
 import com.cinema.service.upload.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,9 @@ public class UploadController {
     @Autowired
     private UploadService uploadService;
 
-    @PostMapping("/upload")
+    @PostMapping("/api/v1/upload")
     public ResponseEntity<?> upload(@RequestParam("img") MultipartFile file) {
-        String urlFile = uploadService.UploadImage(file);
+        String urlFile = uploadService.uploadImage(file);
         return new ResponseEntity<>("Thanh cong " + urlFile, HttpStatus.OK);
     }
 }

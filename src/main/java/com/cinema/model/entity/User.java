@@ -20,7 +20,8 @@ public class User {
     private String password;
     private String email;
     private String fullName;
-    private Boolean status;
+    @Column(columnDefinition = "boolean default true")
+    private Boolean status = true;
     private String image;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

@@ -16,7 +16,7 @@ public class UploadServiceIMPL implements UploadService {
     private String serverPort;
 
     @Override
-    public String UploadImage(MultipartFile file) {
+    public String uploadImage(MultipartFile file) {
         String filename = file.getOriginalFilename();
         try {
             FileCopyUtils.copy(file.getBytes(), new File(pathUpload + filename));

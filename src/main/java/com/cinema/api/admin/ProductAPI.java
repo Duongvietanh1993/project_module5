@@ -1,4 +1,4 @@
-package com.cinema.controller;
+package com.cinema.api.admin;
 
 import com.cinema.model.dto.product.request.ProductRequestDTO;
 import com.cinema.model.dto.product.response.ProductResponseDTO;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin")
-public class ProductController {
+@RequestMapping("/api/v1/admin")
+public class ProductAPI {
     @Autowired
     private ProductService productService;
 

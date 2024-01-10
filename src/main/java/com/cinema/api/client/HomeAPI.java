@@ -1,4 +1,4 @@
-package com.cinema.controller;
+package com.cinema.api.client;
 
 
 import com.cinema.model.dto.product.response.ProductResponseDTO;
@@ -13,10 +13,10 @@ import java.util.List;
 
 @RestController
 
-public class HomeController {
+public class HomeAPI {
     @Autowired
     private ProductService productService;
-    @GetMapping("/products")
+    @GetMapping("/api/v1/products")
     public ResponseEntity<?> getAll(){
         List<ProductResponseDTO> list=productService.getAll();
         return new ResponseEntity<>(list, HttpStatus.OK);

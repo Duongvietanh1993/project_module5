@@ -1,4 +1,4 @@
-package com.cinema.controller;
+package com.cinema.api.admin;
 
 
 import com.cinema.model.dto.user.request.UserRequestDTO;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/api/v1/admin")
+public class AdminAPI {
     @Autowired
     private UserService userService;
 

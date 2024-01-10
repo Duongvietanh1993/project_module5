@@ -30,7 +30,7 @@ public class ProductServiceIMPL implements ProductService {
         newProduct.setName(productRequestDTO.getName());
         newProduct.setPrice(productRequestDTO.getPrice());
         //Upload file
-        String fileName = uploadService.UploadImage(productRequestDTO.getImage());
+        String fileName = uploadService.uploadImage(productRequestDTO.getImage());
         newProduct.setImage(fileName);
         //Lưu database
         productRepository.save(newProduct);
