@@ -1,8 +1,8 @@
 package com.cinema.api.client;
 
 
-import com.cinema.model.dto.product.response.ProductResponseDTO;
-import com.cinema.service.product.ProductService;
+import com.cinema.model.dto.movie.response.MovieResponseDTO;
+import com.cinema.service.movie.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +15,10 @@ import java.util.List;
 
 public class HomeAPI {
     @Autowired
-    private ProductService productService;
-    @GetMapping("/api/v1/products")
+    private MovieService productService;
+    @GetMapping("/api/v1/cinema")
     public ResponseEntity<?> getAll(){
-        List<ProductResponseDTO> list=productService.getAll();
+        List<MovieResponseDTO> list=productService.getAll();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

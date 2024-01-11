@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +21,5 @@ public class Categories {
     private String image;
     @Column(columnDefinition = "boolean default true")
     private boolean status = true;
-
 
 }

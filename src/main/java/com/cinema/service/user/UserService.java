@@ -7,7 +7,7 @@ import com.cinema.model.entity.User;
 
 
 public interface UserService {
-    //    User register(User user);
+        User register(User user);
     UserRegisterDTO register(UserRegisterDTO userRegisterDTO);
 
     UserResponseDTO login(UserRequestDTO userRequestDTO);

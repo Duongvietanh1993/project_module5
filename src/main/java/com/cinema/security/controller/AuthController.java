@@ -25,7 +25,7 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/sign-up")
+    @PostMapping("/sign-in")
     public ResponseEntity<?> login(@Valid @RequestBody UserRequestDTO userRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             // Lấy ra thông báo lỗi đầu tiên
@@ -36,7 +36,7 @@ public class AuthController {
         return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
 
-    @PostMapping("/sign-in")
+    @PostMapping("/sign-up")
     public ResponseEntity<?> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO, BindingResult bindingResult) {
         // Kiểm tra nếu có lỗi validate
         if (bindingResult.hasErrors()) {

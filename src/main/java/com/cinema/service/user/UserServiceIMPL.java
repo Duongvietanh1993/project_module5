@@ -35,7 +35,7 @@ public class UserServiceIMPL implements UserService{
    @Autowired
    private RoleService roleService;
 
-  /*  @Override
+    @Override
     public User register(User user) {
         //mã hóa mật khẩu
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -44,19 +44,19 @@ public class UserServiceIMPL implements UserService{
         //register của user thì coi là User
         if (user.getRoles()==null|| user.getRoles().isEmpty()){
             roles.add(roleService.findByRoleName("USER"));
-        }*//*else {
+        }else {
             //Tạo tài khoản và phân quyền admin
             user.getRoles().forEach(role -> {
                 roles.add(roleService.findById(role.getId()));
             });
-        }*//*
+        }
         User newUser = new User();
         newUser.setUsername(user.getUsername());
         newUser.setStatus(user.getStatus());
         newUser.setPassword(user.getPassword());
         newUser.setRoles(roles);
         return userRepository.save(newUser);
-    }*/
+    }
 
     @Override
     public UserRegisterDTO register(UserRegisterDTO userRegisterDTO) {
