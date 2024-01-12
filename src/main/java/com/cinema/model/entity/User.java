@@ -1,5 +1,6 @@
 package com.cinema.model.entity;
 
+import com.cinema.model.entity.enums.MemberLevel;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,14 +16,17 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true)
     private String username;
     private String password;
     private String email;
     private String fullName;
+    private String image;
+
     @Column(columnDefinition = "boolean default true")
     private Boolean status = true;
-    private String image;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
@@ -30,4 +34,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    @Enumerated(EnumType.STRING)
+    private MemberLevel memberLevel;
+    private Integer scorePoints;
 }

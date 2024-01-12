@@ -20,6 +20,6 @@ public class Categories {
     private String categoryName;
     private String image;
     @Column(columnDefinition = "boolean default true")
-    private boolean status = true;
+    private Boolean status = true;
 
 }

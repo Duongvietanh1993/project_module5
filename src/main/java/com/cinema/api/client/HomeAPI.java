@@ -16,9 +16,10 @@ import java.util.List;
 public class HomeAPI {
     @Autowired
     private MovieService productService;
+
     @GetMapping("/api/v1/cinema")
-    public ResponseEntity<?> getAll(){
-        List<MovieResponseDTO> list=productService.getAll();
+    public ResponseEntity<?> getAll() {
+        List<MovieResponseDTO> list = productService.getAll();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

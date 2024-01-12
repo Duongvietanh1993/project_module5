@@ -1,6 +1,7 @@
 package com.cinema.api.admin;
 
 
+import com.cinema.exception.CustomException;
 import com.cinema.model.dto.user.request.UserRequestDTO;
 import com.cinema.model.dto.user.response.UserResponseDTO;
 import com.cinema.service.user.UserService;
@@ -19,7 +20,7 @@ public class AdminAPI {
     private UserService userService;
 
     @GetMapping("")
-    public ResponseEntity<UserResponseDTO> admin(@RequestBody UserRequestDTO userRequestDTO) {
+    public ResponseEntity<UserResponseDTO> admin(@RequestBody UserRequestDTO userRequestDTO) throws CustomException {
         UserResponseDTO userResponseDTO = userService.login(userRequestDTO);
         return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }

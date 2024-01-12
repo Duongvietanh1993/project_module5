@@ -1,4 +1,4 @@
-package com.cinema.model.dto.user;
+package com.cinema.model.dto.user.request;
 
 import com.cinema.model.entity.Role;
 import com.cinema.model.entity.User;
@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -32,14 +33,5 @@ public class UserRegisterDTO {
     private Boolean status = true;
     private String image;
     private Set<Role> roles;
-
-    public UserRegisterDTO(User user) {
-        this.username = user.getUsername();
-        this.password = user.getPassword();
-        this.email = user.getEmail();
-        this.fullName = user.getFullName();
-        this.status = user.getStatus();
-        this.image = user.getImage();
-        this.roles = user.getRoles();
-    }
+    private String memberLever;
 }

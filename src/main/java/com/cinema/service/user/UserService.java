@@ -1,19 +1,25 @@
 package com.cinema.service.user;
 
-import com.cinema.model.dto.user.UserRegisterDTO;
+import com.cinema.exception.CustomException;
+import com.cinema.model.dto.user.request.ChangePassword;
+import com.cinema.model.dto.user.request.UserRegisterDTO;
 import com.cinema.model.dto.user.request.UserRequestDTO;
 import com.cinema.model.dto.user.response.UserResponseDTO;
-import com.cinema.model.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 public interface UserService {
-        User register(User user);
-    UserRegisterDTO register(UserRegisterDTO userRegisterDTO);
+    void register(UserRegisterDTO userRegisterDTO) throws CustomException;
 
-    UserResponseDTO login(UserRequestDTO userRequestDTO);
-    UserResponseDTO findById(Long id);
-    User findByUsername(String username);
-    boolean existsByEmail(String email);
-    boolean existsByUsername(String username);
+    UserResponseDTO login(UserRequestDTO userRequestDTO) throws CustomException;
+
+    UserResponseDTO findById(Long id) throws CustomException;
+
+    Page<UserResponseDTO> findAllUser(String name, Pageable pageable);
+
+    Boolean changeStatusUser(Long id) throws CustomException;
+
+    Boolean changePassword(Long id, ChangePassword changePassword) throws CustomException;
 
 }

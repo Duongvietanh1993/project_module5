@@ -13,5 +13,5 @@ import org.springframework.web.multipart.MultipartFile;
 public class CategoryRequestDTO {
     private String categoryName;
     private MultipartFile image;
-    private boolean status=true;
+    private Boolean status = true;
 }

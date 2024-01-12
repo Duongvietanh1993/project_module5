@@ -1,5 +1,6 @@
 package com.cinema.api.admin;
 
+import com.cinema.exception.CustomException;
 import com.cinema.model.dto.category.request.CategoryRequestDTO;
 import com.cinema.model.dto.category.response.CategoryResponseDTO;
 import com.cinema.service.category.CategoryService;
@@ -17,7 +18,7 @@ public class CategoryAPI {
     @Autowired
     private CategoryService categoryService;
     @PostMapping("/categories")
-    public ResponseEntity<?> save(@ModelAttribute("category")CategoryRequestDTO categoryRequestDTO){
+    public ResponseEntity<?> save(@ModelAttribute("category")CategoryRequestDTO categoryRequestDTO) throws CustomException {
         CategoryResponseDTO categoryResponseDTO = categoryService.save(categoryRequestDTO);
         return new ResponseEntity<>(categoryResponseDTO, HttpStatus.CREATED);
     }
