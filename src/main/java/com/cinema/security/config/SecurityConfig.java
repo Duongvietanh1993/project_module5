@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (auth) -> auth
                                 .requestMatchers("/api/v1/auth/**",
-                                        "/api/v1/upload/**",
+                                        "/api/v1/chair/**",
                                         "/api/v1/movie/**",
                                         "/*").permitAll()
                                 .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")

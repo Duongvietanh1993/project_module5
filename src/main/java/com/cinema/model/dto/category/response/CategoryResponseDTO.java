@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CategoryResponseDTO {
     private Long id;
-    private String categoryName;
+    private String name;
     private String image;
     private Boolean status = true;
 
     public CategoryResponseDTO(Categories categories) {
         this.id = categories.getId();
-        this.categoryName = categories.getCategoryName();
+        this.name = categories.getName();
         this.status = categories.getStatus();
         this.image = categories.getImage();
     }

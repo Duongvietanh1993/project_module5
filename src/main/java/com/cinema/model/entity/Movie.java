@@ -1,5 +1,6 @@
 package com.cinema.model.entity;
 
+import com.cinema.model.entity.enums.MovieStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,8 +8,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.Set;
+import java.util.Date;
+import java.util.List;
+
 
 @Entity
 @AllArgsConstructor
@@ -28,13 +30,14 @@ public class Movie {
     @JoinTable(name = "category_movie",
             joinColumns = {@JoinColumn(name = "category_id")},
             inverseJoinColumns = {@JoinColumn(name = "movie_id")})
-    private Set<Categories> categories;
+    private List<Categories> categories;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd/MM/yyyy")
     @Temporal(TemporalType.DATE)
-    private LocalDate releaseDate;
+    private Date releaseDate;
 
     private int duration;
-    private String rated;
-    private int isShowing;
+    private Double price;
+    private String rating;
+    private MovieStatus movieStatus;
 }

@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @Builder
 public class CategoryRequestDTO {
-    private String categoryName;
+    private String name;
     private MultipartFile image;
     private Boolean status = true;
 }

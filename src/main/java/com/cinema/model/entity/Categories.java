@@ -17,7 +17,7 @@ public class Categories {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String categoryName;
+    private String name;
     private String image;
     @Column(columnDefinition = "boolean default true")
     private Boolean status = true;

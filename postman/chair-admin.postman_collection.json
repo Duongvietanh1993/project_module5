@@ -1,0 +1,50 @@
+{
+	"info": {
+		"_postman_id": "fdd58aa7-eb28-47f4-bd93-c21358526d6c",
+		"name": "chair-admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29641119"
+	},
+	"item": [
+		{
+			"name": "all",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aWV0IiwiaWF0IjoxNzA1MjM3OTg5LCJleHAiOjE3MDUyNDY5ODl9.W7Ct7wePoci_Gtgl_wMV-OEE-61hyU2BTbSCp6gi_TU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/admin/chair",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"chair"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "change-status",
+			"request": {
+				"method": "PATCH",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

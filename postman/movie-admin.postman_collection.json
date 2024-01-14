@@ -1,0 +1,121 @@
+{
+	"info": {
+		"_postman_id": "0bea97b0-6389-4a50-836b-b1e34e77012c",
+		"name": "movie-admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29641119"
+	},
+	"item": [
+		{
+			"name": "create-movie",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aWV0IiwiaWF0IjoxNzA1MTU1NzI2LCJleHAiOjE3MDUxNjQ3MjZ9.Koh0LcnSO-xJig-X2-rrwAP7ZMUyGB2Kdoekn2HWAAQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "quan",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "aaaa",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/1/Downloads/viet anh 6418.jpg"
+						},
+						{
+							"key": "director",
+							"value": "aaaa",
+							"type": "text"
+						},
+						{
+							"key": "actors",
+							"value": "aaaa",
+							"type": "text"
+						},
+						{
+							"key": "categories",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "releaseDate",
+							"value": "2002/2/2",
+							"type": "text"
+						},
+						{
+							"key": "duration",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "rated",
+							"value": "aaaa",
+							"type": "text"
+						},
+						{
+							"key": "isShowing",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/admin/movie",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"movie"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update",
+			"request": {
+				"method": "PUT",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "change-status",
+			"request": {
+				"method": "PATCH",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "All",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

@@ -1,7 +1,6 @@
 package com.cinema.model.dto.user.request;
 
 import com.cinema.model.entity.Role;
-import com.cinema.model.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

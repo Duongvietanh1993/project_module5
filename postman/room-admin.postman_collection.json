@@ -1,0 +1,90 @@
+{
+	"info": {
+		"_postman_id": "2002cc0b-5f04-48d2-8cc8-a0b14103bc0b",
+		"name": "room-admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29641119"
+	},
+	"item": [
+		{
+			"name": "All",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aWV0IiwiaWF0IjoxNzA1MjM3OTg5LCJleHAiOjE3MDUyNDY5ODl9.W7Ct7wePoci_Gtgl_wMV-OEE-61hyU2BTbSCp6gi_TU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"1\",\r\n    \"numberOfSeats\":\"30\",\r\n    \"theaterId\":\"1\",\r\n    \"movieId\":\"11\",\r\n    \"timeSlotId\":\"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/admin/rooms",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "change-status",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/admin/rooms/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"rooms",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

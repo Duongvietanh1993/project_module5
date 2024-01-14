@@ -39,10 +39,10 @@ public class UserAPI {
         Page<UserResponseDTO> userResponseDTOPage = userService.findAllUser(keyword, pageable);
         return new ResponseEntity<>(userResponseDTOPage, HttpStatus.OK);
     }
-    @PatchMapping("/change-status/{id}")
+    @PatchMapping("/change-status-user/{id}")
     public ResponseEntity<?> changeStatusUser(@PathVariable("id") Long id)throws CustomException{
         userService.changeStatusUser(id);
-        String successMessage = "Bạn đã đổi trạng thái tài khoản!";
+        String successMessage = "Bạn đã đổi trạng thái tài khoản thành công!";
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
 

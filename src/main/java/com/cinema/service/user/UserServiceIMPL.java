@@ -132,7 +132,7 @@ public class UserServiceIMPL implements UserService {
 
     @Override
     public Boolean changeStatusUser(Long id) throws CustomException {
-        User user = userRepository.findById(id).orElseThrow(() -> new CustomException("Không tìm thấy tài khoản"));
+        User user = userRepository.findById(id).orElseThrow(() -> new CustomException("Không tìm thấy tài khoản!"));
         user.setStatus(!user.getStatus());
         userRepository.save(user);
         return true;
@@ -140,7 +140,7 @@ public class UserServiceIMPL implements UserService {
 
     @Override
     public Boolean changePassword(Long id, ChangePassword changePassword) throws CustomException {
-        User user = userRepository.findById(id).orElseThrow(() -> new CustomException("Không tìm thấy tài khoản"));
+        User user = userRepository.findById(id).orElseThrow(() -> new CustomException("Không tìm thấy tài khoản!"));
 
         if (passwordEncoder.matches(changePassword.getOldPassword(), user.getPassword())) {
             if (changePassword.getNewPassword().equals(changePassword.getConfirmPassword())) {

@@ -3,23 +3,62 @@ package com.cinema.api.admin;
 import com.cinema.exception.CustomException;
 import com.cinema.model.dto.category.request.CategoryRequestDTO;
 import com.cinema.model.dto.category.response.CategoryResponseDTO;
+import com.cinema.model.dto.user.response.UserResponseDTO;
 import com.cinema.service.category.CategoryService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/admin")
 public class CategoryAPI {
     @Autowired
     private CategoryService categoryService;
+
+    @GetMapping("/categories")
+    public ResponseEntity<Page<CategoryResponseDTO>> UserAll(@RequestParam(name = "keyword") String keyword,
+                                                             @RequestParam(defaultValue = "5", name = "limit") int limit,
+                                                             @RequestParam(defaultValue = "0", name = "page") int page,
+                                                             @RequestParam(defaultValue = "id", name = "sort") String sort,
+                                                             @RequestParam(defaultValue = "asc", name = "order") String order) {
+        Pageable pageable;
+        if (order.equalsIgnoreCase("desc")) {
+            pageable = PageRequest.of(page, limit, Sort.by(sort).descending());
+        } else {
+            pageable = PageRequest.of(page, limit, Sort.by(sort).ascending());
+        }
+        Page<CategoryResponseDTO> categoryResponseDTOPage = categoryService.findAllCategory(keyword, pageable);
+        return new ResponseEntity<>(categoryResponseDTOPage, HttpStatus.OK);
+    }
+
     @PostMapping("/categories")
-    public ResponseEntity<?> save(@ModelAttribute("category")CategoryRequestDTO categoryRequestDTO) throws CustomException {
+    public ResponseEntity<?> createCategory(@ModelAttribute("category") CategoryRequestDTO categoryRequestDTO) throws CustomException {
         CategoryResponseDTO categoryResponseDTO = categoryService.save(categoryRequestDTO);
         return new ResponseEntity<>(categoryResponseDTO, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/categories/{id}")
+    public ResponseEntity<?> updateCategory(@PathVariable Long id,
+                                            @RequestPart("image") MultipartFile image,
+                                            @RequestParam("category") String categoryRequestDTOJson) throws CustomException, JsonProcessingException {
+        CategoryRequestDTO categoryRequestDTO = new ObjectMapper().readValue(categoryRequestDTOJson, CategoryRequestDTO.class);
+        categoryService.update(id, image, categoryRequestDTO);
+        String successMessage = "Đã sửa thông tin danh mục thành công!";
+        return new ResponseEntity<>(successMessage, HttpStatus.OK);
+    }
+
+    @PatchMapping("/change-status-categories/{id}")
+    public ResponseEntity<?> updateStatus(@PathVariable("id") Long id) throws CustomException {
+        categoryService.changeStatusCategory(id);
+        String successMessage = "Bạn đã đổi trạng thái danh mục thành công!";
+        return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
 }
