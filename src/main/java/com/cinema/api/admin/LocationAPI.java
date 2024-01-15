@@ -4,6 +4,7 @@ import com.cinema.exception.CustomException;
 import com.cinema.model.dto.location.repuest.LocationRequestDTO;
 import com.cinema.model.dto.location.response.LocationResponseDTO;
 import com.cinema.service.location.LocationService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,12 +19,13 @@ import org.springframework.web.bind.annotation.*;
 public class LocationAPI {
     @Autowired
     private LocationService locationServicel;
+
     @GetMapping("/location")
     public ResponseEntity<Page<LocationResponseDTO>> UserAll(@RequestParam(name = "keyword") String keyword,
-                                                          @RequestParam(defaultValue = "5", name = "limit") int limit,
-                                                          @RequestParam(defaultValue = "0", name = "page") int page,
-                                                          @RequestParam(defaultValue = "id", name = "sort") String sort,
-                                                          @RequestParam(defaultValue = "asc", name = "order") String order) {
+                                                             @RequestParam(defaultValue = "5", name = "limit") int limit,
+                                                             @RequestParam(defaultValue = "0", name = "page") int page,
+                                                             @RequestParam(defaultValue = "id", name = "sort") String sort,
+                                                             @RequestParam(defaultValue = "asc", name = "order") String order) {
         Pageable pageable;
         if (order.equalsIgnoreCase("desc")) {
             pageable = PageRequest.of(page, limit, Sort.by(sort).descending());
@@ -35,16 +37,17 @@ public class LocationAPI {
     }
 
     @PostMapping("/location")
-    public ResponseEntity<?> createLocation(@RequestBody LocationRequestDTO locationRequestDTO)throws CustomException{
+    public ResponseEntity<?> createLocation(@Valid @ModelAttribute LocationRequestDTO locationRequestDTO) throws CustomException {
         locationServicel.save(locationRequestDTO);
         String successMessage = "Bạn đã thêm mới địa điểm thành công!";
         return new ResponseEntity<>(successMessage, HttpStatus.CREATED);
     }
+
     @PutMapping("/location/{id}")
-    public ResponseEntity<?> updateLocation(@PathVariable ("id") Long id,
-                                            @ModelAttribute LocationRequestDTO locationRequestDTO)throws CustomException{
+    public ResponseEntity<?> updateLocation(@PathVariable("id") Long id,
+                                            @ModelAttribute LocationRequestDTO locationRequestDTO) throws CustomException {
         locationServicel.update(id, locationRequestDTO);
         String successMessage = "Bạn đã thay đổi thông tin địa điểm thành công!";
-        return new ResponseEntity<>(successMessage,HttpStatus.OK);
+        return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
 }

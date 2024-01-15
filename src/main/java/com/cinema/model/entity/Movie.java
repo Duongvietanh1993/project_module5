@@ -36,8 +36,8 @@ public class Movie {
     @Temporal(TemporalType.DATE)
     private Date releaseDate;
 
-    private int duration;
+    private Double duration;
     private Double price;
-    private String rating;
+    private Double rating;
     private MovieStatus movieStatus;
 }

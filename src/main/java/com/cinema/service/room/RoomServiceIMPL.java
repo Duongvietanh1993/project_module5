@@ -4,14 +4,8 @@ import com.cinema.exception.CustomException;
 import com.cinema.model.dto.room.RoomMapper;
 import com.cinema.model.dto.room.repuest.RoomRequestDTO;
 import com.cinema.model.dto.room.response.RoomResponseDTO;
-import com.cinema.model.entity.Chair;
-import com.cinema.model.entity.Movie;
-import com.cinema.model.entity.Room;
-import com.cinema.model.entity.Theater;
-import com.cinema.repository.ChairRepository;
-import com.cinema.repository.MovieRepository;
-import com.cinema.repository.RoomRepository;
-import com.cinema.repository.TheaterRepository;
+import com.cinema.model.entity.*;
+import com.cinema.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,15 +20,14 @@ public class RoomServiceIMPL implements RoomService {
 
     @Autowired
     private RoomRepository roomRepository;
-
     @Autowired
     private MovieRepository movieRepository;
-
     @Autowired
     private TheaterRepository theaterRepository;
     @Autowired
     private ChairRepository chairRepository;
-
+    @Autowired
+    private TimeSlotRepository timeSlotRepository;
     @Autowired
     private RoomMapper roomMapper;
 
@@ -69,7 +62,7 @@ public class RoomServiceIMPL implements RoomService {
         String name = String.valueOf(strings.charAt(randomLocation));
         for (int i = 0; i < roomRequest.getNumberOfSeats(); i++) {
             Chair chair = new Chair();
-            chair.setName(name + "-" + (i+1));
+            chair.setName(name + "-" + (i + 1));
             chair.setStatus(false);
             chair.setRoom(room);
             list.add(chair);
@@ -79,18 +72,20 @@ public class RoomServiceIMPL implements RoomService {
     }
 
 
-    @Override
-    public RoomResponseDTO update(Long id, RoomRequestDTO roomRequest) throws CustomException {
+    public RoomResponseDTO update(Long id, RoomRequestDTO roomRequestDTO) throws CustomException {
         Room room = roomRepository.findById(id).orElseThrow(() -> new CustomException("Không tìm thấy phòng chiếu với ID: " + id));
-        Movie movie = movieRepository.findById(roomRequest.getMovieId()).orElseThrow(() -> new CustomException("Không tìm thấy phim với ID: " + id));
-        Theater theater = theaterRepository.findById(roomRequest.getTheaterId()).orElseThrow(() -> new CustomException("Không tìm thấy rạp chiếu với ID: " + id));
+        Movie movie = movieRepository.findById(roomRequestDTO.getMovieId()).orElseThrow(() -> new CustomException("Không tìm thấy phim với ID: " + roomRequestDTO.getMovieId()));
+        Theater theater = theaterRepository.findById(roomRequestDTO.getTheaterId()).orElseThrow(() -> new CustomException("Không tìm thấy rạp chiếu với ID: " + roomRequestDTO.getTheaterId()));
+        TimeSlot timeSlot = timeSlotRepository.findById(roomRequestDTO.getTimeSlotId()).orElseThrow(() -> new CustomException("Không tìm thấy ca chiếu với ID: " + roomRequestDTO.getTimeSlotId()));
 
         room.setId(id);
-        room.setName(roomRequest.getName());
-        room.setNumberOfSeats(roomRequest.getNumberOfSeats());
+        room.setName(roomRequestDTO.getName());
+        room.getNumberOfSeats();
         room.setStatus(true);
         room.setMovie(movie);
         room.setTheater(theater);
+        room.setTimeSlot(timeSlot);
+
         return roomMapper.toRoomResponse(roomRepository.save(room));
     }
 

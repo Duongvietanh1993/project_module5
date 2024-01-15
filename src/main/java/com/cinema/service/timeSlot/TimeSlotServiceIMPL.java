@@ -21,8 +21,6 @@ public class TimeSlotServiceIMPL implements TimeSlotService {
     private TimeSlotRepository timeSlotRepository ;
     @Autowired
     private TimeSlotMapper timeSlotMapper ;
-    @Autowired
-    private RoomRepository roomRepository;
 
     @Override
     public Page<TimeSlotResponseDTO> findAllTimeSlot(Pageable pageable) {
@@ -32,7 +30,7 @@ public class TimeSlotServiceIMPL implements TimeSlotService {
 
     @Override
     public TimeSlotResponseDTO findById(Long id) throws CustomException {
-        TimeSlot timeSlot = timeSlotRepository.findById(id).orElseThrow(()-> new CustomException("TimeSlot Not Found"));
+        TimeSlot timeSlot = timeSlotRepository.findById(id).orElseThrow(()-> new CustomException("Không tìm thấy ca chiếu phim!"));
         return timeSlotMapper.toTimeSlotMapper(timeSlot);
     }
 
@@ -47,7 +45,7 @@ public class TimeSlotServiceIMPL implements TimeSlotService {
 
         // Kiểm tra nếu startTime lớn hơn hoặc bằng endTime
         if (startTime != null && endTime != null && !endTime.isAfter(startTime)) {
-            throw new CustomException("End time must be after start time");
+            throw new CustomException("Giờ vào không được lớn hoặc bằng giờ kết thúc!");
         }
 
         TimeSlot timeSlot = timeSlotRepository.save(timeSlotMapper.toEntity(timeSlotRequest));
@@ -56,7 +54,7 @@ public class TimeSlotServiceIMPL implements TimeSlotService {
 
     @Override
     public TimeSlotResponseDTO update(Long id, TimeSlotRequestDTO timeSlotRequest) throws CustomException {
-        TimeSlot timeSlot = timeSlotRepository.findById(id).orElseThrow(() -> new CustomException("TimeSlot Not Found"));
+        TimeSlot timeSlot = timeSlotRepository.findById(id).orElseThrow(() -> new CustomException("Không tìm thấy ca chiếu phim!"));
 
 
         LocalTime startTime = timeSlotRequest.getStartTime();
@@ -64,7 +62,7 @@ public class TimeSlotServiceIMPL implements TimeSlotService {
 
         // Kiểm tra nếu startTime lớn hơn hoặc bằng endTime
         if (startTime != null && endTime != null && !endTime.isAfter(startTime)) {
-            throw new CustomException("End time must be after start time");
+            throw new CustomException("Giờ vào và giờ kết thúc phải khác nhau!");
         }
 
         timeSlot.setId(id);

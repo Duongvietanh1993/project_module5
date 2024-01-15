@@ -10,6 +10,8 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Getter
+@Setter
 @Builder
 public class TimeSlot {
     @Id

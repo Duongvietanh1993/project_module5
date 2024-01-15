@@ -7,6 +7,7 @@ import com.cinema.model.dto.user.response.UserResponseDTO;
 import com.cinema.service.category.CategoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,16 +41,16 @@ public class CategoryAPI {
     }
 
     @PostMapping("/categories")
-    public ResponseEntity<?> createCategory(@ModelAttribute("category") CategoryRequestDTO categoryRequestDTO) throws CustomException {
-        CategoryResponseDTO categoryResponseDTO = categoryService.save(categoryRequestDTO);
-        return new ResponseEntity<>(categoryResponseDTO, HttpStatus.CREATED);
+    public ResponseEntity<?> createCategory(@Valid @ModelAttribute("category") CategoryRequestDTO categoryRequestDTO) throws CustomException {
+        categoryService.save(categoryRequestDTO);
+        String successMessage = "Bạn đã thêm thể loại phim thành công!";
+        return new ResponseEntity<>(successMessage, HttpStatus.CREATED);
     }
 
     @PutMapping("/categories/{id}")
     public ResponseEntity<?> updateCategory(@PathVariable Long id,
                                             @RequestPart("image") MultipartFile image,
-                                            @RequestParam("category") String categoryRequestDTOJson) throws CustomException, JsonProcessingException {
-        CategoryRequestDTO categoryRequestDTO = new ObjectMapper().readValue(categoryRequestDTOJson, CategoryRequestDTO.class);
+                                            @ModelAttribute("category") CategoryRequestDTO categoryRequestDTO) throws CustomException {
         categoryService.update(id, image, categoryRequestDTO);
         String successMessage = "Đã sửa thông tin danh mục thành công!";
         return new ResponseEntity<>(successMessage, HttpStatus.OK);

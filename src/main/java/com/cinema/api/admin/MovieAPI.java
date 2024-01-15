@@ -44,7 +44,7 @@ public class MovieAPI {
     }
 
     @PostMapping("/movie")
-    public ResponseEntity<?> save(@Valid @ModelAttribute MovieRequestDTO movieRequestDTO) throws CustomException {
+    public ResponseEntity<?> createMovie(@Valid @ModelAttribute MovieRequestDTO movieRequestDTO) throws CustomException {
         movieService.save(movieRequestDTO);
         String successMessage = "Bạn đã thêm mới bộ phim thành công!";
         return new ResponseEntity<>(successMessage, HttpStatus.CREATED);

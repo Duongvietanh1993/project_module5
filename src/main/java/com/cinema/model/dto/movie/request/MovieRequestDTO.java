@@ -1,6 +1,10 @@
 package com.cinema.model.dto.movie.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,24 +20,22 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class MovieRequestDTO {
-    @NotNull(message = "Không được để trống!")
+    @NotBlank(message = "Không được để trống!")
     private String name;
-    @NotNull(message = "Không được để trống!")
+    @NotBlank(message = "Không được để trống!")
     private String description;
     private MultipartFile image;
-    @NotNull(message = "Không được để trống!")
+    @NotBlank(message = "Không được để trống!")
     private String director;
-    @NotNull(message = "Không được để trống!")
+    @NotBlank(message = "Không được để trống!")
     private String actors;
     private List<Long> categoryId;
-    @NotNull(message = "Không được để trống!")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd/MM/yyyy")
+    @Temporal(TemporalType.DATE)
     private Date releaseDate;
-    @NotNull(message = "Không được để trống!")
-    private int duration;
-    @NotNull(message = "Không được để trống!")
+    private Double duration;
     private Double price;
-    private String rating;
-    @NotNull(message = "Không được để trống!")
+    private Double rating;
+    @NotBlank(message = "Hãy chọn 1 trong các trạng thái (coming-showing-expired)!!")
     private String movieStatus;
 }

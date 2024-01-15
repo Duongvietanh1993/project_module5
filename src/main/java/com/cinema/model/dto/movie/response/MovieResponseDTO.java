@@ -2,6 +2,9 @@ package com.cinema.model.dto.movie.response;
 
 
 import com.cinema.model.entity.Categories;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,10 +26,12 @@ public class MovieResponseDTO {
     private String director;
     private String actors;
     private List<String> categoryName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @Temporal(TemporalType.DATE)
     private Date releaseDate;
-    private int duration;
+    private Double duration;
     private Double price;
-    private String rating;
+    private Double rating;
     private String movieStatus;
 
     public MovieResponseDTO(Movie movie) {

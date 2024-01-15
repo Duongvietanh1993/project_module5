@@ -5,6 +5,7 @@ import com.cinema.model.dto.movie.response.MovieResponseDTO;
 import com.cinema.model.dto.room.repuest.RoomRequestDTO;
 import com.cinema.model.dto.room.response.RoomResponseDTO;
 import com.cinema.service.room.RoomService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,15 +36,19 @@ public class RoomAPI {
         return new ResponseEntity<>(movieResponseDTOPage, HttpStatus.OK);
     }
     @PostMapping("/rooms")
-    public ResponseEntity<?> createRoom(@RequestBody RoomRequestDTO roomRequestDTO)throws CustomException{
+    public ResponseEntity<?> createRoom(@ModelAttribute RoomRequestDTO roomRequestDTO)throws CustomException{
         roomService.save(roomRequestDTO);
         String successMessage = "Bạn đã thêm phòng chiếu phim thành công!";
         return new ResponseEntity<>(successMessage,HttpStatus.CREATED);
     }
     @PutMapping("/rooms/{id}")
-    public ResponseEntity<?> updateRoom(@PathVariable("id") Long id,
-                                        @RequestBody RoomRequestDTO roomRequestDTO)throws CustomException{
-        return new ResponseEntity<>(roomService.update(id, roomRequestDTO), HttpStatus.OK);
+    public ResponseEntity<?> updateRoom(@Valid @PathVariable("id") Long id, @ModelAttribute RoomRequestDTO roomRequestDTO) throws CustomException {
+        try {
+            RoomResponseDTO updatedRoom = roomService.update(id, roomRequestDTO);
+            return ResponseEntity.ok(updatedRoom);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
     @PatchMapping("/change-status-room/{id}")
     public ResponseEntity<?> updateStatus(@PathVariable("id") Long id) throws CustomException {
