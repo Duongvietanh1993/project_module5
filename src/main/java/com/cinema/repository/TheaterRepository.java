@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TheaterRepository extends JpaRepository<Theater, Long> {
 
-    Page<Theater> findAllByNameContainingIgnoreCase (String name, Pageable pageable) ;
+    Page<Theater> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
     Boolean existsByName (String name) ;
 }

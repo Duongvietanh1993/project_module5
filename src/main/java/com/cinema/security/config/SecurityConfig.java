@@ -41,6 +41,7 @@ public class SecurityConfig {
                                         "/api/v1/chair/**",
                                         "/api/v1/movie/**",
                                         "/*").permitAll()
+                                .requestMatchers("/api/v1/booking/**").hasAuthority("USER")
                                 .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )

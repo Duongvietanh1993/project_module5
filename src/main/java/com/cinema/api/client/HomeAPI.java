@@ -2,7 +2,9 @@ package com.cinema.api.client;
 
 
 import com.cinema.exception.CustomException;
+import com.cinema.model.dto.bookingDetail.request.BookingDetailRequestDTO;
 import com.cinema.model.dto.movie.response.MovieResponseDTO;
+import com.cinema.service.bookingDetail.BookingDetailService;
 import com.cinema.service.chair.ChairService;
 import com.cinema.service.movie.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,7 +25,9 @@ public class HomeAPI {
     @Autowired
     private MovieService movieService;
     @Autowired
-    private ChairService chairService ;
+    private ChairService chairService;
+    @Autowired
+    private BookingDetailService bookingDetailService;
 
     @GetMapping("/api/v1/movie")
     public ResponseEntity<Page<MovieResponseDTO>> userAll(@RequestParam(name = "keyword") String keyword,
@@ -49,7 +51,14 @@ public class HomeAPI {
     }
 
     @GetMapping("/api/v1/chair/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id ) throws CustomException {
+    public ResponseEntity<?> getById(@PathVariable Long id) throws CustomException {
         return new ResponseEntity<>(chairService.findById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/v1/booking")
+    public ResponseEntity<?> createBooking(Authentication authentication, @ModelAttribute BookingDetailRequestDTO bookingDetailRequestDTO) throws CustomException {
+        bookingDetailService.save(authentication, bookingDetailRequestDTO);
+        String successMessage = "Bạn đã đặt vé thành công!";
+        return new ResponseEntity<>(successMessage, HttpStatus.CREATED);
     }
 }
