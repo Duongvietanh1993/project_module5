@@ -72,31 +72,30 @@ public class BookingDetailServiceIMPL implements BookingDetailService {
         // Lấy thông tin phòng chiếu từ bookingDetailRequestDTO
         Room room = roomRepository.findById(bookingDetailRequestDTO.getRoomId())
                 .orElseThrow(() -> new CustomException("Không tìm thấy phòng chiếu phim có ID" + bookingDetailRequestDTO.getRoomId()));
-
+        // Kiểm tra phòng chiếu có phim đó không
+        if (!room.getMovie().equals(movie)) {
+            throw new CustomException("Phòng chiếu này không có phim " + movie.getName());
+        }
         // Lấy thông tin ghế từ bookingDetailRequestDTO
         Chair chair = chairRepository.findById(bookingDetailRequestDTO.getChaiId())
                 .orElseThrow(() -> new CustomException("Không tìm thấy ghế có ID" + bookingDetailRequestDTO.getChaiId()));
+        // Kiểm tra ghế có thuộc phòng chiếu không
+        if (!room.getChairs().equals(chair)) {
+            throw new CustomException("Ghế không thuộc phòng chiếu " + chair);
+        }
+        // Kiểm tra ghế đã được đặt chưa
+        if (chair.getStatus()) {
+            throw new CustomException("Ghế đã được đặt");
+        }
+
 
         // Lấy thông tin ca chiếu phim từ bookingDetailRequestDTO
         TimeSlot timeSlot = timeSlotRepository.findById(bookingDetailRequestDTO.getTimeSlotId())
                 .orElseThrow(() -> new CustomException("Không tìm thấy ca chiếu phim có ID" + bookingDetailRequestDTO.getTimeSlotId()));
 
-        // Lấy danh sách tất cả BookingDetail từ repository
-        List<BookingDetail> bookingDetailList = bookingDetailRepository.findAll();
 
-        // Kiểm tra nếu BookingDetail đã tồn tại với các thông tin tương ứng
-        for (BookingDetail item : bookingDetailList) {
-            if (item.getUser().getId() == user.getId() &&
-                    item.getChair().getRoom().getMovie().getId() == movie.getId() &&
-                    item.getChair().getRoom().getTheater().getId() == theater.getId() &&
-                    item.getChair().getRoom().getId() == room.getId() &&
-                    item.getChair().getRoom().getTimeSlot().getId() == timeSlot.getId() &&
-                    item.getChair().getId() == chair.getId()) {
-                throw new CustomException("Exits BookingDetail");
-            }
-        }
         // Đếm số lượng BookingDetail đã được xác nhận (status = true)
-        Long count = bookingDetailRepository.countByStatus(true);
+        Integer count = bookingDetailRepository.countByStatus(true);
 
         // Cập nhật MemberLevel và điểm tích lũy của người dùng dựa trên số lượng BookingDetail đã xác nhận
         if (count > 0 && count <= 20) {
@@ -105,10 +104,10 @@ public class BookingDetailServiceIMPL implements BookingDetailService {
             user.setMemberLevel(MemberLevel.SILVER);
         } else if (count > 40 && count <= 60) {
             user.setMemberLevel(MemberLevel.GOLD);
-        } else {
+        } else if (count > 60) {
             user.setMemberLevel(MemberLevel.PLATINUM);
         }
-        user.setScorePoints(count.intValue());
+        user.setScorePoints(count);
 
         // Tính toán giảm giá và tổng số tiền dựa trên MemberLevel
         Double discount = 0.0;
@@ -158,7 +157,7 @@ public class BookingDetailServiceIMPL implements BookingDetailService {
         // Tạo tên phòng chiếu kết hợp với một số tự tăng không bị trùng lặp
         String roomName = room.getName();
         Long uniqueId = bookingDetailRepository.count(); // Số tự tăng không bị trùng lặp
-        String combinedName = roomName +"-"+ uniqueId;
+        String combinedName = roomName + "-" + uniqueId;
         bookingDetail.setName(combinedName); // Gán tên phòng chiếu đã tạo cho bookingDetail
 
         // Lưu đối tượng BookingDetail vào cơ sở dữ liệu

@@ -22,7 +22,7 @@ public class User {
     private String password;
     private String email;
     private String fullName;
-    private String image;
+    private String image = "http://localhost:8080/avatar.jpeg";
 
     @Column(columnDefinition = "boolean default true")
     private Boolean status = true;

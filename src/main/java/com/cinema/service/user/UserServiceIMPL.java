@@ -72,18 +72,15 @@ public class UserServiceIMPL implements UserService {
         }
 
         // Trả về UserRegisterDTO đã đăng ký
-        userRepository.save(User.builder()
-                .username(userRegisterDTO.getUsername())
+        userRepository.save(User.builder().username(userRegisterDTO.getUsername())
                 .password(userRegisterDTO.getPassword())
                 .email(userRegisterDTO.getEmail())
                 .fullName(userRegisterDTO.getFullName())
-                .status(true)
-                .image(userRegisterDTO.getImage())
+                .status(true).image(userRegisterDTO.getImage())
                 .roles(roles)
                 .scorePoints(0)
                 .memberLevel(memberLevel)
-                .build()
-        );
+                .build());
     }
 
     @Override
@@ -98,35 +95,26 @@ public class UserServiceIMPL implements UserService {
             Authentication authentication = authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(userRequestDTO.getUsername(), userRequestDTO.getPassword()));
             UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
 
-            return UserResponseDTO.builder()
-                    .token(jwtProvider.generateToken(userPrinciple))
-                    .username(userPrinciple.getUsername())
-                    .fullName(userPrinciple.getUser().getFullName())
-                    .email(userPrinciple.getUser().getEmail())
-                    .status(userPrinciple.getUser().getStatus())
-                    .image(userPrinciple.getUser().getImage())
-                    .roles(userPrinciple.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()))
-                    .memberLever(userPrinciple.getUser().getMemberLevel().name())
-                    .build();
+            return UserResponseDTO.builder().token(jwtProvider.generateToken(userPrinciple)).username(userPrinciple.getUsername()).fullName(userPrinciple.getUser().getFullName()).email(userPrinciple.getUser().getEmail()).status(userPrinciple.getUser().getStatus()).image(userPrinciple.getUser().getImage()).roles(userPrinciple.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet())).memberLever(userPrinciple.getUser().getMemberLevel().name()).build();
         } catch (AuthenticationException e) {
             throw new CustomException("Thông tin đăng nhập không hợp lệ. Vui lòng kiểm tra lại tên đăng nhập và mật khẩu.");
         }
     }
 
     @Override
-    public UserResponseDTO findById(Long id) throws CustomException{
-       User user = userRepository.findById(id).orElseThrow(()->new CustomException("User not found"));
-       return new UserResponseDTO(user);
+    public UserResponseDTO findById(Long id) throws CustomException {
+        User user = userRepository.findById(id).orElseThrow(() -> new CustomException("User not found"));
+        return new UserResponseDTO(user);
     }
 
     @Override
     public Page<UserResponseDTO> findAllUser(String name, Pageable pageable) {
-       Page<User> page;
-       if (name.isEmpty()) {
-           page = userRepository.findAll(pageable);
-       }else {
-           page = userRepository.findAllByUsernameContainingIgnoreCase(name,pageable);
-       }
+        Page<User> page;
+        if (name.isEmpty()) {
+            page = userRepository.findAll(pageable);
+        } else {
+            page = userRepository.findAllByUsernameContainingIgnoreCase(name, pageable);
+        }
         return page.map(UserResponseDTO::new);
     }
 

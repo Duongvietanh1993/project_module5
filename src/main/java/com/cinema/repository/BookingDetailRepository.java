@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookingDetailRepository extends JpaRepository<BookingDetail, Long> {
     Page<BookingDetail> findAllByNameContainingIgnoreCase (String name, Pageable pageable) ;
-    Long countByStatus(boolean status);
+    Integer countByStatus(boolean status);
 }

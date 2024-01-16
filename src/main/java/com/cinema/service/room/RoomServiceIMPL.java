@@ -51,7 +51,7 @@ public class RoomServiceIMPL implements RoomService {
     @Override
     public RoomResponseDTO save(RoomRequestDTO roomRequest) throws CustomException {
         if (roomRepository.existsByNameAndMovie_IdAndTimeSlot_Id(roomRequest.getName(), roomRequest.getMovieId(), roomRequest.getTimeSlotId())) {
-            throw new CustomException("Phòng chiếu phim với cùng tên đã tồn tại");
+            throw new CustomException("Phòng chiếu và ca chiếu đã tồn tại");
         }
 
         Room room = roomRepository.save(roomMapper.toEntity(roomRequest));

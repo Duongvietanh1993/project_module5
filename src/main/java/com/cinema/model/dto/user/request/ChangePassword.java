@@ -17,5 +17,7 @@ public class ChangePassword {
     @NotBlank(message = "Mật khẩu không được trống")
     @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 ký tự")
     private String newPassword;
+    @NotBlank(message = "Mật khẩu không được trống")
+    @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 ký tự")
     private String confirmPassword ;
 }

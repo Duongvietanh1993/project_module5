@@ -40,6 +40,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/auth/**",
                                         "/api/v1/chair/**",
                                         "/api/v1/movie/**",
+                                        "/api/v1/rooms/**",
                                         "/*").permitAll()
                                 .requestMatchers("/api/v1/booking/**").hasAuthority("USER")
                                 .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")

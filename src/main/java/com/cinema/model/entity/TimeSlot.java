@@ -19,11 +19,9 @@ public class TimeSlot {
     private Long id ;
 
     private String name ;
-    @Column(name = "start_time")
     @JsonFormat(pattern = "HH:mm")
     private LocalTime startTime;
 
-    @Column(name = "end_time")
     @JsonFormat(pattern = "HH:mm")
     private LocalTime endTime;
 

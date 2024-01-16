@@ -20,7 +20,6 @@ public class Theater {
     private Long id;
     private String name ;
     @ManyToOne
-    @JoinColumn(name = "location_id")
     private Location location ;
 
     @OneToMany(mappedBy = "theater")

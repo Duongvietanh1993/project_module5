@@ -6,27 +6,11 @@ import com.cinema.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class BookingDetailMapper {
-    @Autowired
-    private UserRepository userRepository ;
 
-    @Autowired
-    private TimeSlotRepository timeSlotRepository ;
-
-    @Autowired
-    private RoomRepository roomRepository ;
-
-    @Autowired
-    private TheaterRepository theaterRepository ;
-    @Autowired
-    private LocationRepository locationRepository ;
-
-    @Autowired
-    private MovieRepository movieRepository ;
-
-    @Autowired
-    private ChairRepository chairRepository ;
     public BookingDetailResponseDTO toBookingDetailResponse(BookingDetail bookingDetail) {
         return BookingDetailResponseDTO.builder()
                 .id(bookingDetail.getId())

@@ -30,7 +30,7 @@ public class UserRegisterDTO {
     @NotBlank(message = "Tên người dùng không được trống")
     private String fullName;
     private Boolean status = true;
-    private String image;
+    private String image = "http://localhost:8080/avatar.jpeg";
     private Set<Role> roles;
     private String memberLever;
 }
