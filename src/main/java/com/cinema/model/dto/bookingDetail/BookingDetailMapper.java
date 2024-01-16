@@ -29,6 +29,4 @@ public class BookingDetailMapper {
                 .status(bookingDetail.getStatus())
                 .build();
     }
-
-
 }

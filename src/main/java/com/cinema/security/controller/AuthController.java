@@ -28,7 +28,6 @@ public class AuthController {
     public ResponseEntity<?> register(@Valid @ModelAttribute UserRegisterDTO userRegisterDTO) throws CustomException {
         userService.register(userRegisterDTO);
         String successMessage = "Bạn đã đăng ký tài khoản thành công mời đăng nhập!";
-        // Trả về phản hồi thành công với đối tượng UserResponseDTO
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
     @PatchMapping("/change-password/{id}")

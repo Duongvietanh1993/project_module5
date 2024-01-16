@@ -8,6 +8,7 @@ import com.cinema.model.entity.*;
 import com.cinema.model.entity.enums.MemberLevel;
 import com.cinema.repository.*;
 import com.cinema.security.user_principle.UserPrinciple;
+import com.cinema.service.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +36,8 @@ public class BookingDetailServiceIMPL implements BookingDetailService {
     private ChairRepository chairRepository;
     @Autowired
     private BookingDetailMapper bookingDetailMapper;
+    @Autowired
+    private EmailService emailService;
 
 
     @Override
@@ -65,10 +68,6 @@ public class BookingDetailServiceIMPL implements BookingDetailService {
         Movie movie = movieRepository.findById(bookingDetailRequestDTO.getMovieId())
                 .orElseThrow(() -> new CustomException("Không tìm thấy phim có ID" + bookingDetailRequestDTO.getMovieId()));
 
-        // Lấy thông tin rạp chiếu phim từ bookingDetailRequestDTO
-        Theater theater = theaterRepository.findById(bookingDetailRequestDTO.getTheaterId())
-                .orElseThrow(() -> new CustomException("Không tìm thấy rạp chiếu phim có ID" + bookingDetailRequestDTO.getTheaterId()));
-
         // Lấy thông tin phòng chiếu từ bookingDetailRequestDTO
         Room room = roomRepository.findById(bookingDetailRequestDTO.getRoomId())
                 .orElseThrow(() -> new CustomException("Không tìm thấy phòng chiếu phim có ID" + bookingDetailRequestDTO.getRoomId()));
@@ -76,12 +75,21 @@ public class BookingDetailServiceIMPL implements BookingDetailService {
         if (!room.getMovie().equals(movie)) {
             throw new CustomException("Phòng chiếu này không có phim " + movie.getName());
         }
+
+        // Lấy thông tin rạp chiếu phim từ bookingDetailRequestDTO
+        Theater theater = theaterRepository.findById(bookingDetailRequestDTO.getTheaterId())
+                .orElseThrow(() -> new CustomException("Không tìm thấy rạp chiếu phim có ID" + bookingDetailRequestDTO.getTheaterId()));
+        // kiểm tra rạp chiếu có phòng chiếu này không
+        if (!room.getTheater().equals(theater)) {
+            throw new CustomException("Rạp chiếu này không có phòng chiếu " + room.getName());
+        }
+
         // Lấy thông tin ghế từ bookingDetailRequestDTO
         Chair chair = chairRepository.findById(bookingDetailRequestDTO.getChaiId())
                 .orElseThrow(() -> new CustomException("Không tìm thấy ghế có ID" + bookingDetailRequestDTO.getChaiId()));
         // Kiểm tra ghế có thuộc phòng chiếu không
-        if (!room.getChairs().equals(chair)) {
-            throw new CustomException("Ghế không thuộc phòng chiếu " + chair);
+        if (!room.getChairs().contains(chair)) {
+            throw new CustomException("Ghế không thuộc phòng chiếu " + chair.getName());
         }
         // Kiểm tra ghế đã được đặt chưa
         if (chair.getStatus()) {
@@ -92,7 +100,9 @@ public class BookingDetailServiceIMPL implements BookingDetailService {
         // Lấy thông tin ca chiếu phim từ bookingDetailRequestDTO
         TimeSlot timeSlot = timeSlotRepository.findById(bookingDetailRequestDTO.getTimeSlotId())
                 .orElseThrow(() -> new CustomException("Không tìm thấy ca chiếu phim có ID" + bookingDetailRequestDTO.getTimeSlotId()));
-
+        if (room.getTimeSlot() != timeSlot) {
+            throw new CustomException("Phim không có ca chiếu này!");
+        }
 
         // Đếm số lượng BookingDetail đã được xác nhận (status = true)
         Integer count = bookingDetailRepository.countByStatus(true);
@@ -151,8 +161,8 @@ public class BookingDetailServiceIMPL implements BookingDetailService {
         chair.setStatus(true);
         // Đặt ngày đặt vé là ngày hiện tại
         bookingDetail.setBookingDate(new Date());
-        // Đặt trạng thái của đặt vé là chưa thanh toán
-        bookingDetail.setStatus(false);
+        // Đặt trạng thái của đặt vé là đã thanh toán
+        bookingDetail.setStatus(true);
 
         // Tạo tên phòng chiếu kết hợp với một số tự tăng không bị trùng lặp
         String roomName = room.getName();
@@ -163,28 +173,17 @@ public class BookingDetailServiceIMPL implements BookingDetailService {
         // Lưu đối tượng BookingDetail vào cơ sở dữ liệu
         BookingDetail createBookingDetail = bookingDetailRepository.save(bookingDetail);
 
+        // Gửi email thông báo mua vé thành công
+        emailService.sendEmail(user.getEmail(), bookingDetailMapper.toBookingDetailResponse(createBookingDetail));
+
         // Trả về một đối tượng BookingDetailResponseDTO chứa thông tin chi tiết của BookingDetail vừa được tạo
-        return BookingDetailResponseDTO.builder()
-                .id(createBookingDetail.getId())
-                .name(createBookingDetail.getName())
-                .customer(userPrinciple.getUser().getUsername())
-                .chairName(chair.getName())
-                .timeSlotName(timeSlot.getName())
-                .roomName(room.getName())
-                .theaterName(theater.getName())
-                .locationName(theater.getLocation().getName())
-                .movieName(movie.getName())
-                .discount(createBookingDetail.getDiscount())
-                .subTotal(createBookingDetail.getSubTotal())
-                .totalAmount(createBookingDetail.getTotalAmount())
-                .bookingDate(createBookingDetail.getBookingDate())
-                .status(createBookingDetail.getStatus())
-                .build();
+        return bookingDetailMapper.toBookingDetailResponse(createBookingDetail);
     }
 
     @Override
     public BookingDetailResponseDTO changeStatusBookingDetail(Long id) throws CustomException {
         BookingDetail bookingDetail = bookingDetailRepository.findById(id).orElseThrow(() -> new CustomException("Không tìm thấy chi tiết đặt chỗ!"));
+
         if (!bookingDetail.getStatus()) {
             bookingDetail.setStatus(true);
         }
