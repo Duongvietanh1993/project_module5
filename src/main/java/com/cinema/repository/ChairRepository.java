@@ -2,6 +2,7 @@ package com.cinema.repository;
 
 
 import com.cinema.model.entity.Chair;
+import com.cinema.model.entity.Room;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,5 @@ public interface ChairRepository extends JpaRepository<Chair, Long> {
     List<Chair> findByRoomId(Long roomId);
     @Query("SELECT c FROM Chair c WHERE LOWER(c.room.name) LIKE LOWER(CONCAT('%', :roomName, '%'))")
     Page<Chair> findByRoomNameContainingIgnoreCase(String roomName, Pageable pageable);
+
 }

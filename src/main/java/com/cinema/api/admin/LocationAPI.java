@@ -22,10 +22,10 @@ public class LocationAPI {
 
     @GetMapping("/location")
     public ResponseEntity<Page<LocationResponseDTO>> locationAll(@RequestParam(name = "keyword") String keyword,
-                                                             @RequestParam(defaultValue = "5", name = "limit") int limit,
-                                                             @RequestParam(defaultValue = "0", name = "page") int page,
-                                                             @RequestParam(defaultValue = "id", name = "sort") String sort,
-                                                             @RequestParam(defaultValue = "asc", name = "order") String order) {
+                                                                 @RequestParam(defaultValue = "5", name = "limit") int limit,
+                                                                 @RequestParam(defaultValue = "0", name = "page") int page,
+                                                                 @RequestParam(defaultValue = "id", name = "sort") String sort,
+                                                                 @RequestParam(defaultValue = "asc", name = "order") String order) {
         Pageable pageable;
         if (order.equalsIgnoreCase("desc")) {
             pageable = PageRequest.of(page, limit, Sort.by(sort).descending());
@@ -44,9 +44,16 @@ public class LocationAPI {
     }
 
     @PutMapping("/location/{id}")
-    public ResponseEntity<?> updateLocation(@PathVariable("id") Long id,
+    public ResponseEntity<?> updateLocation(@PathVariable("id") String id,
                                             @ModelAttribute LocationRequestDTO locationRequestDTO) throws CustomException {
-        locationServicel.update(id, locationRequestDTO);
+        Long locationId = null;
+        try {
+            locationId = Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("ID không hợp lệ", HttpStatus.BAD_REQUEST);
+        }
+
+        locationServicel.update(locationId, locationRequestDTO);
         String successMessage = "Bạn đã thay đổi thông tin địa điểm thành công!";
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }

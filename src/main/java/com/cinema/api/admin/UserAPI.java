@@ -40,10 +40,54 @@ public class UserAPI {
         return new ResponseEntity<>(userResponseDTOPage, HttpStatus.OK);
     }
     @PatchMapping("/change-status-user/{id}")
-    public ResponseEntity<?> changeStatusUser(@PathVariable("id") Long id)throws CustomException{
-        userService.changeStatusUser(id);
+    public ResponseEntity<?> changeStatusUser(@PathVariable("id") String id)throws CustomException{
+        Long userId = null;
+        try {
+            userId = Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("ID không hợp lệ", HttpStatus.BAD_REQUEST);
+        }
+
+        userService.changeStatusUser(userId);
         String successMessage = "Bạn đã đổi trạng thái tài khoản thành công!";
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
 
+    @PatchMapping("/add-role-to-user/{id}")
+    public ResponseEntity<?> addRoleToUser(@PathVariable("id") String id, @ModelAttribute("roleName") String roleName) throws CustomException {
+        Long userId = null;
+        try {
+            userId = Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("ID không hợp lệ", HttpStatus.BAD_REQUEST);
+        }
+
+        boolean result = userService.addRoleToUser(userId, roleName);
+        if (result) {
+            String successMessage = "Đã thêm quyền cho tài khoản thành công!";
+            return new ResponseEntity<>(successMessage, HttpStatus.OK);
+        } else {
+            String errorMessage = "Thêm quyền cho tài khoản thất bại!";
+            return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PatchMapping("/remove-role-from-user/{id}")
+    public ResponseEntity<?> removeRoleFromUser(@PathVariable("id") String id, @ModelAttribute("roleName") String roleName) throws CustomException {
+        Long userId = null;
+        try {
+            userId = Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("ID không hợp lệ", HttpStatus.BAD_REQUEST);
+        }
+
+        boolean result = userService.removeRoleFromUser(userId, roleName);
+        if (result) {
+            String successMessage = "Đã xóa quyền khỏi tài khoản thành công!";
+            return new ResponseEntity<>(successMessage, HttpStatus.OK);
+        } else {
+            String errorMessage = "Xóa quyền khỏi tài khoản thất bại!";
+            return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

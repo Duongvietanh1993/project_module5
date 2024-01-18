@@ -95,7 +95,16 @@ public class UserServiceIMPL implements UserService {
             Authentication authentication = authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(userRequestDTO.getUsername(), userRequestDTO.getPassword()));
             UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
 
-            return UserResponseDTO.builder().token(jwtProvider.generateToken(userPrinciple)).username(userPrinciple.getUsername()).fullName(userPrinciple.getUser().getFullName()).email(userPrinciple.getUser().getEmail()).status(userPrinciple.getUser().getStatus()).image(userPrinciple.getUser().getImage()).roles(userPrinciple.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet())).memberLever(userPrinciple.getUser().getMemberLevel().name()).build();
+            return UserResponseDTO.builder().token(jwtProvider.generateToken(userPrinciple))
+                    .username(userPrinciple.getUsername())
+                    .fullName(userPrinciple.getUser().getFullName())
+                    .email(userPrinciple.getUser().getEmail())
+                    .status(userPrinciple.getUser().getStatus())
+                    .image(userPrinciple.getUser().getImage())
+                    .roles(userPrinciple.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()))
+                    .memberLever(userPrinciple.getUser().getMemberLevel().name())
+                    .scorePoints(userPrinciple.getUser().getScorePoints())
+                    .build();
         } catch (AuthenticationException e) {
             throw new CustomException("Thông tin đăng nhập không hợp lệ. Vui lòng kiểm tra lại tên đăng nhập và mật khẩu.");
         }
@@ -121,6 +130,9 @@ public class UserServiceIMPL implements UserService {
     @Override
     public Boolean changeStatusUser(Long id) throws CustomException {
         User user = userRepository.findById(id).orElseThrow(() -> new CustomException("Không tìm thấy tài khoản!"));
+        if (user.getRoles().stream().anyMatch(role -> role.getName().equals("ADMIN"))) {
+            throw new CustomException("Không thể khóa tài khoản ADMIN!");
+        }
         user.setStatus(!user.getStatus());
         userRepository.save(user);
         return true;
@@ -144,4 +156,30 @@ public class UserServiceIMPL implements UserService {
         }
     }
 
+    @Override
+    public Boolean addRoleToUser(Long userId, String roleName) throws CustomException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException("Không tìm thấy tài khoản!"));
+
+        Role role = roleService.findByRoleName(roleName);
+        if (role == null) {
+            throw new CustomException("Không tìm thấy vai trò: " + roleName);
+        }
+
+        user.getRoles().add(role);
+        userRepository.save(user);
+        return true;
+    }
+    @Override
+    public Boolean removeRoleFromUser(Long userId, String roleName) throws CustomException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException("Không tìm thấy tài khoản!"));
+
+        Role role = roleService.findByRoleName(roleName);
+        if (role == null) {
+            throw new CustomException("Không tìm thấy vai trò: " + roleName);
+        }
+
+        user.getRoles().remove(role);
+        userRepository.save(user);
+        return true;
+    }
 }

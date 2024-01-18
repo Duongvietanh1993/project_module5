@@ -21,5 +21,7 @@ public interface UserService {
     Boolean changeStatusUser(Long id) throws CustomException;
 
     Boolean changePassword(Long id, ChangePassword changePassword) throws CustomException;
+    Boolean addRoleToUser(Long userId, String roleName) throws CustomException;
+    Boolean removeRoleFromUser(Long userId, String roleName) throws CustomException;
 
 }

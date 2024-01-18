@@ -44,9 +44,16 @@ public class TheaterAPI {
     }
 
     @PutMapping("/theater/{id}")
-    public ResponseEntity<?> createTheater(@Valid @PathVariable("id") Long id,
+    public ResponseEntity<?> createTheater(@Valid @PathVariable("id") String id,
                                            @ModelAttribute TheaterRequestDTO theaterRequestDTO) throws CustomException {
-        theaterService.update(id,theaterRequestDTO);
+        Long theaterId = null;
+        try {
+            theaterId = Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("ID không hợp lệ", HttpStatus.BAD_REQUEST);
+        }
+
+        theaterService.update(theaterId,theaterRequestDTO);
         String successMessage = "Bạn đã sửa thông tin rạp chiếu phim thành công!";
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }

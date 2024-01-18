@@ -26,10 +26,10 @@ public class CategoryAPI {
 
     @GetMapping("/categories")
     public ResponseEntity<Page<CategoryResponseDTO>> categoryAll(@RequestParam(name = "keyword") String keyword,
-                                                             @RequestParam(defaultValue = "5", name = "limit") int limit,
-                                                             @RequestParam(defaultValue = "0", name = "page") int page,
-                                                             @RequestParam(defaultValue = "id", name = "sort") String sort,
-                                                             @RequestParam(defaultValue = "asc", name = "order") String order) {
+                                                                 @RequestParam(defaultValue = "5", name = "limit") int limit,
+                                                                 @RequestParam(defaultValue = "0", name = "page") int page,
+                                                                 @RequestParam(defaultValue = "id", name = "sort") String sort,
+                                                                 @RequestParam(defaultValue = "asc", name = "order") String order) {
         Pageable pageable;
         if (order.equalsIgnoreCase("desc")) {
             pageable = PageRequest.of(page, limit, Sort.by(sort).descending());
@@ -48,17 +48,31 @@ public class CategoryAPI {
     }
 
     @PutMapping("/categories/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable Long id,
+    public ResponseEntity<?> updateCategory(@PathVariable String id,
                                             @RequestPart("image") MultipartFile image,
                                             @ModelAttribute("category") CategoryRequestDTO categoryRequestDTO) throws CustomException {
-        categoryService.update(id, image, categoryRequestDTO);
+        Long categoryId = null;
+        try {
+            categoryId = Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("ID không hợp lệ", HttpStatus.BAD_REQUEST);
+        }
+
+        categoryService.update(categoryId, image, categoryRequestDTO);
         String successMessage = "Đã sửa thông tin danh mục thành công!";
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
 
     @PatchMapping("/change-status-categories/{id}")
-    public ResponseEntity<?> updateStatus(@PathVariable("id") Long id) throws CustomException {
-        categoryService.changeStatusCategory(id);
+    public ResponseEntity<?> updateStatus(@PathVariable("id") String id) throws CustomException {
+        Long categoryId = null;
+        try {
+            categoryId = Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("ID không hợp lệ", HttpStatus.BAD_REQUEST);
+        }
+
+        categoryService.changeStatusCategory(categoryId);
         String successMessage = "Bạn đã đổi trạng thái danh mục thành công!";
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }

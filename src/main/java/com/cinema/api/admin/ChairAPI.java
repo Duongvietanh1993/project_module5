@@ -2,6 +2,7 @@ package com.cinema.api.admin;
 
 import com.cinema.exception.CustomException;
 import com.cinema.model.dto.bookingDetail.response.BookingDetailResponseDTO;
+import com.cinema.model.dto.chair.repuest.ChairRequestDTO;
 import com.cinema.model.dto.chair.response.ChairResponseDTO;
 import com.cinema.service.chair.ChairService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/admin")
 public class ChairAPI {
     @Autowired
-    private ChairService chairService ;
+    private ChairService chairService;
+
     @GetMapping("/chair")
     public ResponseEntity<Page<ChairResponseDTO>> chairAll(@RequestParam(name = "keyword") String keyword,
                                                            @RequestParam(defaultValue = "5", name = "limit") int limit,
@@ -33,10 +35,27 @@ public class ChairAPI {
         Page<ChairResponseDTO> chairResponseDTOPage = chairService.findAllChair(keyword, pageable);
         return new ResponseEntity<>(chairResponseDTOPage, HttpStatus.OK);
     }
-    @PatchMapping("/chair/{id}")
-    public ResponseEntity<?> changeStatus(@PathVariable("id") Long id)throws CustomException {
-        chairService.changeStatusChair(id);
-        String successMessage = "Bạn đã đổi trạng thái ghế thành công!";
-        return new ResponseEntity<>(successMessage,HttpStatus.OK);
+
+    @PostMapping("/chair")
+    public ResponseEntity<?> addChair(@ModelAttribute ChairRequestDTO chairRequestDTO) throws CustomException {
+        chairService.addChair(chairRequestDTO);
+        String successMessage = "Bạn đã thêm ghế thành công!";
+        return new ResponseEntity<>(successMessage, HttpStatus.CREATED);
+
     }
+
+    @PatchMapping("/chair/{id}")
+    public ResponseEntity<?> changeStatus(@PathVariable("id") String id) throws CustomException {
+        Long chairId = null;
+        try {
+            chairId = Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("ID không hợp lệ", HttpStatus.BAD_REQUEST);
+        }
+
+        chairService.changeStatusChair(chairId);
+        String successMessage = "Bạn đã đổi trạng thái ghế thành công!";
+        return new ResponseEntity<>(successMessage, HttpStatus.OK);
+    }
+
 }

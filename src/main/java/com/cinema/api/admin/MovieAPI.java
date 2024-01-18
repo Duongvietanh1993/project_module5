@@ -29,10 +29,10 @@ public class MovieAPI {
 
     @GetMapping("/movie")
     public ResponseEntity<Page<MovieResponseDTO>> movieAll(@RequestParam(name = "keyword") String keyword,
-                                                          @RequestParam(defaultValue = "5", name = "limit") int limit,
-                                                          @RequestParam(defaultValue = "0", name = "page") int page,
-                                                          @RequestParam(defaultValue = "id", name = "sort") String sort,
-                                                          @RequestParam(defaultValue = "asc", name = "order") String order) {
+                                                           @RequestParam(defaultValue = "5", name = "limit") int limit,
+                                                           @RequestParam(defaultValue = "0", name = "page") int page,
+                                                           @RequestParam(defaultValue = "id", name = "sort") String sort,
+                                                           @RequestParam(defaultValue = "asc", name = "order") String order) {
         Pageable pageable;
         if (order.equalsIgnoreCase("desc")) {
             pageable = PageRequest.of(page, limit, Sort.by(sort).descending());
@@ -50,13 +50,27 @@ public class MovieAPI {
         return new ResponseEntity<>(successMessage, HttpStatus.CREATED);
     }
     @PutMapping("/movie/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @ModelAttribute MovieRequestDTO movieRequestDTO) throws CustomException {
-        MovieResponseDTO updatedMovie = movieService.update(id, movieRequestDTO);
+    public ResponseEntity<?> update(@PathVariable("id") String id, @Valid @ModelAttribute MovieRequestDTO movieRequestDTO) throws CustomException {
+        Long movieId = null;
+        try {
+            movieId = Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("ID không hợp lệ", HttpStatus.BAD_REQUEST);
+        }
+
+        MovieResponseDTO updatedMovie = movieService.update(movieId, movieRequestDTO);
         return new ResponseEntity<>(updatedMovie, HttpStatus.OK);
     }
     @PatchMapping("/change-status-movie/{id}")
-    public ResponseEntity<?> changeStatus(@PathVariable("id") Long id,@ModelAttribute("movieStatus") String newStatus) throws CustomException{
-        movieService.changeStatusMovie(id,newStatus);
+    public ResponseEntity<?> changeStatus(@PathVariable("id") String id,@ModelAttribute("movieStatus") String newStatus) throws CustomException{
+        Long movieId = null;
+        try {
+            movieId = Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("ID không hợp lệ", HttpStatus.BAD_REQUEST);
+        }
+
+        movieService.changeStatusMovie(movieId,newStatus);
         String successMessage = "Bạn đã đổi trạng thái bộ phim thành công!";
         return new ResponseEntity<>(successMessage,HttpStatus.OK);
     }
