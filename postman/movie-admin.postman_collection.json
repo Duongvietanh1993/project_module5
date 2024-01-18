@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0bea97b0-6389-4a50-836b-b1e34e77012c",
+		"_postman_id": "16d98cc1-53fa-47ea-a158-0f1e895b608c",
 		"name": "movie-admin",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29641119"
@@ -97,7 +97,10 @@
 			"name": "update",
 			"request": {
 				"method": "PUT",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": ""
+				}
 			},
 			"response": []
 		},
@@ -105,7 +108,10 @@
 			"name": "change-status",
 			"request": {
 				"method": "PATCH",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": ""
+				}
 			},
 			"response": []
 		},
@@ -113,7 +119,10 @@
 			"name": "All",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": ""
+				}
 			},
 			"response": []
 		}

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "288060ca-a627-4068-8fe2-5483677e2f15",
+		"_postman_id": "d7691ffb-f73b-4d86-a81d-25f3f6975dec",
 		"name": "user-admin",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29641119"
@@ -42,7 +42,76 @@
 			"name": "all",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add-role-to-user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwNTU1MjA5NCwiZXhwIjoxNzA1NTcwMDk0fQ.Kq0si91cj-GtyvuDyRQyd0xCFEu6Y_ccSVi-ES77SNo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "roleName",
+							"value": "ADMIN",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/admin/add-role-to-user/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"add-role-to-user",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove-role-from-user",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/admin/add-role-to-user/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"add-role-to-user",
+						"2"
+					]
+				}
 			},
 			"response": []
 		}

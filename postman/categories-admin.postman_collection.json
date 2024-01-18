@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "43d17401-d4ed-4018-a839-7f08a9670ff0",
+		"_postman_id": "a5e0c580-383a-4537-b88f-f65202644792",
 		"name": "categories-admin",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29641119"
@@ -57,7 +57,10 @@
 			"name": "All",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": ""
+				}
 			},
 			"response": []
 		},

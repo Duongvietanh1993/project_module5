@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "343a5c42-6d7d-4a30-8acf-a0852ee92130",
-		"name": "location-admin",
+		"_postman_id": "2d882c7f-8d12-45f0-bcb8-f70a15b3b976",
+		"name": "booking-admin",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29641119"
 	},
@@ -12,18 +12,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "create",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/v1/admin/location",
+					"raw": "http://localhost:8080/api/v1/admin/time-slot",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -33,33 +22,29 @@
 						"api",
 						"v1",
 						"admin",
-						"location"
+						"time-slot"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "update",
+			"name": "changeStatus",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aWV0IiwiaWF0IjoxNzA1MjM3OTg5LCJleHAiOjE3MDUyNDY5ODl9.W7Ct7wePoci_Gtgl_wMV-OEE-61hyU2BTbSCp6gi_TU",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aWV0IiwiaWF0IjoxNzA1MzM2NTI3LCJleHAiOjE3MDUzNDU1Mjd9.ctMrDl1uEzx9XS90iCQzFA_qt797dW-L_S6DBsX6vf8",
 							"type": "string"
 						}
 					]
 				},
-				"method": "PUT",
+				"method": "PATCH",
 				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": []
-				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/admin/location/1?locationRequestDTO={\"name\": \"HBT\"}",
+					"raw": "http://localhost:8080/api/v1/admin/booking/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -69,16 +54,18 @@
 						"api",
 						"v1",
 						"admin",
-						"location",
+						"booking",
 						"1"
-					],
-					"query": [
-						{
-							"key": "locationRequestDTO",
-							"value": "{\"name\": \"HBT\"}"
-						}
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "getTicketsSoldByMovieAndMonth",
+			"request": {
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}
