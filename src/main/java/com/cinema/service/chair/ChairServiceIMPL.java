@@ -5,7 +5,10 @@ import com.cinema.model.dto.chair.ChairMapper;
 import com.cinema.model.dto.chair.response.ChairResponseDTO;
 import com.cinema.model.entity.Chair;
 import com.cinema.repository.ChairRepository;
+import com.cinema.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +21,14 @@ public class ChairServiceIMPL implements ChairService{
     @Autowired
     private ChairMapper chairMapper ;
     @Override
-    public List<ChairResponseDTO> findAllChair() {
-        List<Chair> list = chairRepository.findAll() ;
-        return list.stream().map(item -> chairMapper.toChairResponse(item)).collect(Collectors.toList());
+    public Page<ChairResponseDTO> findAllChair(String room, Pageable pageable) {
+        Page<Chair> chairPage;
+        if (room == null || room.isEmpty()) {
+            chairPage = chairRepository.findAll(pageable);
+        } else {
+            chairPage = chairRepository.findByRoomNameContainingIgnoreCase(room, pageable);
+        }
+        return chairPage.map(item -> chairMapper.toChairResponse(item));
     }
 
     @Override

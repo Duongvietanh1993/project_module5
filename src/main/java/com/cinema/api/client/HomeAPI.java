@@ -3,6 +3,7 @@ package com.cinema.api.client;
 
 import com.cinema.exception.CustomException;
 import com.cinema.model.dto.bookingDetail.request.BookingDetailRequestDTO;
+import com.cinema.model.dto.chair.response.ChairResponseDTO;
 import com.cinema.model.dto.movie.response.MovieResponseDTO;
 import com.cinema.model.dto.room.response.RoomResponseDTO;
 import com.cinema.service.bookingDetail.BookingDetailService;
@@ -50,8 +51,19 @@ public class HomeAPI {
     }
 
     @GetMapping("/api/v1/chair")
-    public ResponseEntity<?> chairAll() {
-        return new ResponseEntity<>(chairService.findAllChair(), HttpStatus.OK);
+    public ResponseEntity<Page<ChairResponseDTO>> chairAll(@RequestParam(name = "keyword") String keyword,
+                                                           @RequestParam(defaultValue = "5", name = "limit") int limit,
+                                                           @RequestParam(defaultValue = "0", name = "page") int page,
+                                                           @RequestParam(defaultValue = "id", name = "sort") String sort,
+                                                           @RequestParam(defaultValue = "asc", name = "order") String order) {
+        Pageable pageable;
+        if (order.equalsIgnoreCase("desc")) {
+            pageable = PageRequest.of(page, limit, Sort.by(sort).descending());
+        } else {
+            pageable = PageRequest.of(page, limit, Sort.by(sort).ascending());
+        }
+        Page<ChairResponseDTO> chairResponseDTOPage = chairService.findAllChair(keyword, pageable);
+        return new ResponseEntity<>(chairResponseDTOPage, HttpStatus.OK);
     }
 
     @GetMapping("/api/v1/chair/{id}")

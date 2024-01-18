@@ -16,13 +16,16 @@ import java.time.LocalTime;
 public class TimeSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
-    private String name ;
+    private String name;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime startTime;
 
     @JsonFormat(pattern = "HH:mm")
     private LocalTime endTime;
+
+    @Column(columnDefinition = "boolean default true")
+    private Boolean status = true;
 
 }

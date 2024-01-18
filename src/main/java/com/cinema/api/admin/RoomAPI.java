@@ -21,7 +21,7 @@ public class RoomAPI {
     @Autowired
     private RoomService roomService;
     @GetMapping("/rooms")
-    public ResponseEntity<Page<RoomResponseDTO>> UserAll(@RequestParam(name = "keyword") String keyword,
+    public ResponseEntity<Page<RoomResponseDTO>> roomAll(@RequestParam(name = "keyword") String keyword,
                                                           @RequestParam(defaultValue = "5", name = "limit") int limit,
                                                           @RequestParam(defaultValue = "0", name = "page") int page,
                                                           @RequestParam(defaultValue = "id", name = "sort") String sort,
@@ -54,6 +54,12 @@ public class RoomAPI {
     public ResponseEntity<?> updateStatus(@PathVariable("id") Long id) throws CustomException {
         roomService.changeStatusRoom(id);
         String successMessage = "Bạn đã đổi trạng thái phòng chiếu thành công!";
+        return new ResponseEntity<>(successMessage, HttpStatus.OK);
+    }
+    @PatchMapping("/change-status-time-room-chair/{id}")
+    public ResponseEntity<?> updateStatusTime(@PathVariable("id") Long id) throws CustomException {
+        roomService.changeStatusTimeSlot(id);
+        String successMessage = "Bạn đã đổi trạng thái ca chiếu thành công!";
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
 }

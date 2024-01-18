@@ -25,7 +25,7 @@ public class CategoryAPI {
     private CategoryService categoryService;
 
     @GetMapping("/categories")
-    public ResponseEntity<Page<CategoryResponseDTO>> UserAll(@RequestParam(name = "keyword") String keyword,
+    public ResponseEntity<Page<CategoryResponseDTO>> categoryAll(@RequestParam(name = "keyword") String keyword,
                                                              @RequestParam(defaultValue = "5", name = "limit") int limit,
                                                              @RequestParam(defaultValue = "0", name = "page") int page,
                                                              @RequestParam(defaultValue = "id", name = "sort") String sort,

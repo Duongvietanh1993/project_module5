@@ -28,7 +28,7 @@ public class MovieAPI {
     private MovieService movieService;
 
     @GetMapping("/movie")
-    public ResponseEntity<Page<MovieResponseDTO>> UserAll(@RequestParam(name = "keyword") String keyword,
+    public ResponseEntity<Page<MovieResponseDTO>> movieAll(@RequestParam(name = "keyword") String keyword,
                                                           @RequestParam(defaultValue = "5", name = "limit") int limit,
                                                           @RequestParam(defaultValue = "0", name = "page") int page,
                                                           @RequestParam(defaultValue = "id", name = "sort") String sort,

@@ -12,5 +12,6 @@ public interface RoomService {
     RoomResponseDTO save(RoomRequestDTO roomRequest) throws CustomException;
     RoomResponseDTO update(Long id , RoomRequestDTO roomRequest) throws CustomException;
     RoomResponseDTO changeStatusRoom(Long id) throws CustomException;
+    Boolean changeStatusTimeSlot(Long id) throws CustomException;
 
 }

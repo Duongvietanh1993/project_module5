@@ -25,7 +25,7 @@ public class UserAPI {
     private UserService userService;
 
     @GetMapping("users")
-    public ResponseEntity<Page<UserResponseDTO>> UserAll(@RequestParam(name = "keyword") String keyword,
+    public ResponseEntity<Page<UserResponseDTO>> userAll(@RequestParam(name = "keyword") String keyword,
                                                          @RequestParam(defaultValue = "5", name = "limit") int limit,
                                                          @RequestParam(defaultValue = "0", name = "page") int page,
                                                          @RequestParam(defaultValue = "id", name = "sort") String sort,

@@ -190,7 +190,7 @@ public class MovieServiceIMPL implements MovieService {
                 break;
             default:
                 // Xử lý nếu trạng thái không hợp lệ
-                throw new CustomException( newStatus + " Not Found");
+                throw new CustomException( newStatus + " Hãy chọn 1 trong các trạng thái (coming-showing-expired)!!");
         }
 
         return new MovieResponseDTO(movieRepository.save(movie));

@@ -15,8 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class BookingDetailServiceIMPL implements BookingDetailService {
@@ -62,23 +62,23 @@ public class BookingDetailServiceIMPL implements BookingDetailService {
         // Lấy thông tin người dùng từ đối tượng xác thực (authentication)
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         User user = userRepository.findById(userPrinciple.getUser().getId())
-                .orElseThrow(() -> new CustomException("Không tìm thấy người dùng có ID" + userPrinciple.getUser().getId()));
+                .orElseThrow(() -> new CustomException("Không tìm thấy người dùng có ID " + userPrinciple.getUser().getId()));
 
         // Lấy thông tin phim từ bookingDetailRequestDTO
         Movie movie = movieRepository.findById(bookingDetailRequestDTO.getMovieId())
-                .orElseThrow(() -> new CustomException("Không tìm thấy phim có ID" + bookingDetailRequestDTO.getMovieId()));
+                .orElseThrow(() -> new CustomException("Không tìm thấy phim có ID " + bookingDetailRequestDTO.getMovieId()));
 
         // Lấy thông tin phòng chiếu từ bookingDetailRequestDTO
         Room room = roomRepository.findById(bookingDetailRequestDTO.getRoomId())
-                .orElseThrow(() -> new CustomException("Không tìm thấy phòng chiếu phim có ID" + bookingDetailRequestDTO.getRoomId()));
+                .orElseThrow(() -> new CustomException("Không tìm thấy phòng chiếu phim có ID " + bookingDetailRequestDTO.getRoomId()));
         // Kiểm tra phòng chiếu có phim đó không
         if (!room.getMovie().equals(movie)) {
-            throw new CustomException("Phòng chiếu này không có phim " + movie.getName());
+            throw new CustomException("Phòng chiếu này không có lịch chiếu phim " + movie.getName());
         }
 
         // Lấy thông tin rạp chiếu phim từ bookingDetailRequestDTO
         Theater theater = theaterRepository.findById(bookingDetailRequestDTO.getTheaterId())
-                .orElseThrow(() -> new CustomException("Không tìm thấy rạp chiếu phim có ID" + bookingDetailRequestDTO.getTheaterId()));
+                .orElseThrow(() -> new CustomException("Không tìm thấy rạp chiếu phim có ID " + bookingDetailRequestDTO.getTheaterId()));
         // kiểm tra rạp chiếu có phòng chiếu này không
         if (!room.getTheater().equals(theater)) {
             throw new CustomException("Rạp chiếu này không có phòng chiếu " + room.getName());
@@ -86,20 +86,20 @@ public class BookingDetailServiceIMPL implements BookingDetailService {
 
         // Lấy thông tin ghế từ bookingDetailRequestDTO
         Chair chair = chairRepository.findById(bookingDetailRequestDTO.getChaiId())
-                .orElseThrow(() -> new CustomException("Không tìm thấy ghế có ID" + bookingDetailRequestDTO.getChaiId()));
+                .orElseThrow(() -> new CustomException("Không tìm thấy ghế có ID " + bookingDetailRequestDTO.getChaiId()));
         // Kiểm tra ghế có thuộc phòng chiếu không
         if (!room.getChairs().contains(chair)) {
-            throw new CustomException("Ghế không thuộc phòng chiếu " + chair.getName());
+            throw new CustomException("Ghế " + chair.getName()+ " không thuộc phòng chiếu "+ room.getName());
         }
         // Kiểm tra ghế đã được đặt chưa
         if (chair.getStatus()) {
-            throw new CustomException("Ghế đã được đặt");
+            throw new CustomException("Ghế đã được đặt!");
         }
 
 
         // Lấy thông tin ca chiếu phim từ bookingDetailRequestDTO
         TimeSlot timeSlot = timeSlotRepository.findById(bookingDetailRequestDTO.getTimeSlotId())
-                .orElseThrow(() -> new CustomException("Không tìm thấy ca chiếu phim có ID" + bookingDetailRequestDTO.getTimeSlotId()));
+                .orElseThrow(() -> new CustomException("Không tìm thấy ca chiếu phim có ID " + bookingDetailRequestDTO.getTimeSlotId()));
         if (room.getTimeSlot() != timeSlot) {
             throw new CustomException("Phim không có ca chiếu này!");
         }
@@ -197,5 +197,24 @@ public class BookingDetailServiceIMPL implements BookingDetailService {
         if (!bookingDetail.getStatus()) {
             roomRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public Integer countTicketsSoldByMovieAndMonth(Long movieId, int month, int year) {
+        // Tạo một đối tượng Calendar để làm việc với ngày và thời gian
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month - 1); // Lưu ý: Calendar.MONTH bắt đầu từ 0 (tháng 0 là tháng 1)
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date startDate = calendar.getTime(); // Ngày đầu tiên của tháng
+
+        calendar.add(Calendar.MONTH, 1); // Chuyển đến tháng tiếp theo
+        Date endDate = calendar.getTime(); // Ngày đầu tiên của tháng tiếp theo
+
+        // Sử dụng phương thức của BookingDetailRepository để đếm số lượng vé bán trong khoảng thời gian đã chỉ định
+        return bookingDetailRepository.countByChair_Room_Movie_IdAndBookingDateBetween(movieId, startDate, endDate);
     }
 }

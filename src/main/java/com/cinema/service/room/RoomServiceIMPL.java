@@ -92,9 +92,38 @@ public class RoomServiceIMPL implements RoomService {
     @Override
     public RoomResponseDTO changeStatusRoom(Long id) throws CustomException {
         Room room = roomRepository.findById(id).orElseThrow(() -> new CustomException("Không tìm thấy phòng chiếu với ID: " + id));
-        room.setStatus(!room.getStatus());
+        boolean newStatus = !room.getStatus();
+        room.setStatus(newStatus);
+
+        List<Chair> chairs = chairRepository.findByRoomId(id);
+        for (Chair chair : chairs) {
+            chair.setStatus(false);
+        }
+        chairRepository.saveAll(chairs);
+
         return roomMapper.toRoomResponse(roomRepository.save(room));
     }
 
+    @Override
+    public Boolean changeStatusTimeSlot(Long id) throws CustomException {
+        TimeSlot timeSlot = timeSlotRepository.findById(id).orElseThrow(() -> new CustomException("Không tìm thấy ca chiếu với ID " + id));
+        timeSlot.setStatus(!timeSlot.getStatus());
+        timeSlotRepository.save(timeSlot);
 
+        // Lấy danh sách phòng chiếu thuộc ca chiếu
+        List<Room> rooms = roomRepository.findByTimeSlotId(id);
+        for (Room room : rooms) {
+            room.setStatus(false); // Đặt trạng thái của phòng chiếu về false
+
+            // Lấy danh sách ghế thuộc phòng chiếu
+            List<Chair> chairs = chairRepository.findByRoomId(room.getId());
+            for (Chair chair : chairs) {
+                chair.setStatus(false); // Đặt trạng thái của ghế về false
+            }
+            chairRepository.saveAll(chairs); // Lưu danh sách ghế
+        }
+        roomRepository.saveAll(rooms); // Lưu danh sách phòng chiếu
+
+        return true;
+    }
 }

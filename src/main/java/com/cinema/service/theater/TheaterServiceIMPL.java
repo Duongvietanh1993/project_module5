@@ -45,7 +45,7 @@ public class TheaterServiceIMPL implements TheaterService {
     @Override
     public TheaterResponseDTO save(TheaterRequestDTO theaterRequest) throws CustomException {
         if (theaterRepository.existsByName(theaterRequest.getName())){
-            throw  new CustomException("Exits TheaterName") ;
+            throw  new CustomException("Tên rạp đã được sử dụng!!") ;
         }
         Theater theater = theaterRepository.save(theaterMapper.toEntity(theaterRequest));
         return theaterMapper.toTheaterResponse(theater);
@@ -54,6 +54,9 @@ public class TheaterServiceIMPL implements TheaterService {
     @Override
     public TheaterResponseDTO update(Long id, TheaterRequestDTO theaterRequest) throws CustomException {
         Theater theater = theaterRepository.findById(id).orElseThrow(() -> new CustomException("Không tìm thấy rạp chiếu với ID: " + id));
+        if (theaterRepository.existsByName(theaterRequest.getName())) {
+            throw new CustomException("Tên rạp đã được sử dụng!!");
+        }
 
         Location location = locationRepository.findById(theaterRequest.getLocationId()).orElseThrow(()-> new CustomException("Không tìm thấy vị trí với ID: " + id));
         theater.setId(id);

@@ -22,7 +22,7 @@ public class TimeSlotAPI {
     private TimeSlotService timeSlotService;
 
     @GetMapping("/time-slot")
-    public ResponseEntity<Page<TimeSlotResponseDTO>> UserAll(@RequestParam(defaultValue = "5", name = "limit") int limit,
+    public ResponseEntity<Page<TimeSlotResponseDTO>> timeSlotAll(@RequestParam(defaultValue = "5", name = "limit") int limit,
                                                              @RequestParam(defaultValue = "0", name = "page") int page,
                                                              @RequestParam(defaultValue = "id", name = "sort") String sort,
                                                              @RequestParam(defaultValue = "asc", name = "order") String order) {
@@ -46,6 +46,12 @@ public class TimeSlotAPI {
                                             @ModelAttribute TimeSlotRequestDTO timeSlotRequestDTO)throws CustomException{
         timeSlotService.update(id,timeSlotRequestDTO);
         String successMessage = "Đã sửa thông tin ca chiếu phim thành công!";
+        return new ResponseEntity<>(successMessage, HttpStatus.OK);
+    }
+    @PatchMapping("/change-status-time/{id}")
+    public ResponseEntity<?> updateStatusTimeSlot(@PathVariable("id")Long id)throws CustomException{
+        timeSlotService.changeStatusTimeSlot(id);
+        String successMessage = "Bạn đã đổi trạng thái ca chiếu thành công!";
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
 }

@@ -18,4 +18,5 @@ public class TimeSlotResponseDTO {
 
     @JsonFormat(pattern = "HH:mm")
     private LocalTime endTime;
+    private Boolean status;
 }

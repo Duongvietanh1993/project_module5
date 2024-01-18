@@ -31,9 +31,9 @@ public class AuthController {
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
     @PatchMapping("/change-password/{id}")
-    public ResponseEntity<?> changePassword(@Valid @PathVariable Long id, @ModelAttribute ChangePassword changePassword) throws CustomException {
+    public ResponseEntity<?> changePassword(@Valid @PathVariable Long id, @ModelAttribute ChangePassword password) throws CustomException {
         String successMessage = null ;
-        if (userService.changePassword(id, changePassword)) {
+        if (userService.changePassword(id, password)) {
             successMessage = "Đổi mật khẩu thành công!";
         }
         return new ResponseEntity<>(successMessage, HttpStatus.OK);

@@ -15,6 +15,7 @@ public class TimeSlotMapper {
                 .name(timeSlot.getName())
                 .startTime(timeSlot.getStartTime())
                 .endTime(timeSlot.getEndTime())
+                .status(true)
                 .build();
     }
 
@@ -23,6 +24,7 @@ public class TimeSlotMapper {
                 .name(timeSlotRequest.getName())
                 .startTime(timeSlotRequest.getStartTime())
                 .endTime(timeSlotRequest.getEndTime())
+                .status(true)
                 .build();
     }
 }

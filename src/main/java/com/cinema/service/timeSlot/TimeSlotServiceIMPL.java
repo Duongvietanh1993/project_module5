@@ -37,7 +37,10 @@ public class TimeSlotServiceIMPL implements TimeSlotService {
     @Override
     public TimeSlotResponseDTO save(TimeSlotRequestDTO timeSlotRequest) throws CustomException {
         if (timeSlotRepository.existsByStartTimeAndEndTime(timeSlotRequest.getStartTime() , timeSlotRequest.getEndTime())) {
-            throw new CustomException("Exits TimeSlot");
+            throw new CustomException("Giờ chiếu đã tồn tại!!");
+        }
+        if (timeSlotRepository.existsByName(timeSlotRequest.getName())) {
+            throw new CustomException("Ca chiếu đã tồn tại!!");
         }
 
         LocalTime startTime = timeSlotRequest.getStartTime();
@@ -73,6 +76,13 @@ public class TimeSlotServiceIMPL implements TimeSlotService {
         return timeSlotMapper.toTimeSlotMapper(timeSlotRepository.save(timeSlot));
     }
 
+    @Override
+    public Boolean changeStatusTimeSlot(Long id) throws CustomException {
+        TimeSlot timeSlot = timeSlotRepository.findById(id).orElseThrow(()->new CustomException("Không tìm thấy ca chiếu với ID "+id));
+        timeSlot.setStatus(!timeSlot.getStatus());
+        timeSlotRepository.save(timeSlot);
+        return true;
+    }
 
 
 }

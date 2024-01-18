@@ -21,7 +21,7 @@ public class LocationAPI {
     private LocationService locationServicel;
 
     @GetMapping("/location")
-    public ResponseEntity<Page<LocationResponseDTO>> UserAll(@RequestParam(name = "keyword") String keyword,
+    public ResponseEntity<Page<LocationResponseDTO>> locationAll(@RequestParam(name = "keyword") String keyword,
                                                              @RequestParam(defaultValue = "5", name = "limit") int limit,
                                                              @RequestParam(defaultValue = "0", name = "page") int page,
                                                              @RequestParam(defaultValue = "id", name = "sort") String sort,

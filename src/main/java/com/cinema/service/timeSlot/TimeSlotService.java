@@ -14,5 +14,5 @@ public interface TimeSlotService {
     TimeSlotResponseDTO save(TimeSlotRequestDTO timeSlotRequest) throws CustomException;
 
     TimeSlotResponseDTO update(Long id , TimeSlotRequestDTO timeSlotRequest) throws CustomException;
-
+    Boolean changeStatusTimeSlot(Long id) throws CustomException;
 }
